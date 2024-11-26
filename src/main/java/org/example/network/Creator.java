@@ -21,9 +21,9 @@ public class Creator implements Closeable {
 
     }
 
-    public Creator(ServerSocket serverSocket) {
+    public Creator(Socket socket) {
         try {
-            this.socket = serverSocket.accept();
+            this.socket = socket;
             this.reader = createReader();
             this.writer = createWriter();
         } catch (IOException e) {

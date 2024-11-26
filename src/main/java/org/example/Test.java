@@ -14,6 +14,6 @@ public class Test {
         );
         Order order = new Order("Независимости 11", "Alice", items);
         Order order1 = new Order("Прямая 11", "Федя", items);
-        db.checkOrderDeliveryStatus(5);
+        String s = db.checkOrderDeliveryStatus(5);
     }
 }

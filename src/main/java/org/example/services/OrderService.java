@@ -19,9 +19,9 @@ public class OrderService {
         dataBaseManager.addOrder(order);
     }
 
-    public void checkOrderStatus(int orderId)
+    public String checkOrderStatus(int orderId)
     {
-                dataBaseManager.checkOrderDeliveryStatus(orderId);
+        return dataBaseManager.checkOrderDeliveryStatus(orderId);
     }
 
 

@@ -108,52 +108,48 @@ public class DataBaseManager {
             e.printStackTrace();
         }
     }
-    public boolean checkOrderDeliveryStatus(int orderId)  {
-        String selectOrderSQL = "SELECT orderId, delivered, deliveryTime FROM orders WHERE orderId = ?";
+    public String checkOrderDeliveryStatus(int orderId) {
+        String selectOrderSQL = "SELECT delivered, deliveryTime FROM orders WHERE orderId = ?";
 
-        try(Connection connection = connect()) {
-
+        try (Connection connection = connect()) {
             connection.setAutoCommit(false);
 
             PreparedStatement orderStatement = connection.prepareStatement(selectOrderSQL);
             orderStatement.setInt(1, orderId);
             ResultSet rs = orderStatement.executeQuery();
-            if(rs.next()) {
+
+            if (rs.next()) {
                 boolean delivered = rs.getBoolean("delivered");
                 LocalDateTime deliveryTime = LocalDateTime.parse(rs.getString("deliveryTime"));
                 Order order = new Order(orderId, delivered, deliveryTime);
-                if(order.isDelivered())
-                {
-                    markAsDelivered(orderId,connection);
-                    System.out.println("Order id " + orderId + " successfully delivered");
+
+                if (order.isDelivered()) {
+                    markAsDelivered(orderId, connection);
                     connection.commit();
-                    return true;
+                    String message = "Order ID " + orderId + " has been successfully delivered.";
+                    System.out.println(message); // Логирование на сервере
+                    return message;
+                } else {
+                    String message = "Order ID " + orderId + " has not been delivered yet.";
+                    System.out.println(message); // Логирование на сервере
+                    return message;
                 }
-                else {
-                    System.out.println("Order id " + orderId + " not delivered");
-                    return false;
-                }
-
+            } else {
+                String message = "Order ID " + orderId + " not found.";
+                System.out.println(message); // Логирование на сервере
+                return message;
             }
-            else
-            {
-                System.out.println("Order not found");
-                return false;
-            }
-
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            try(Connection connection = connect()) {
+            try (Connection connection = connect()) {
                 connection.rollback();
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            return "An error occurred while checking the order status.";
         }
-        return false;
     }
+
 private void markAsDelivered(int orderId, Connection connection)  {
         String updateOrderSQL  = "UPDATE orders SET delivered = ? WHERE orderId = ?";
         try(PreparedStatement orderStatement = connection.prepareStatement(updateOrderSQL))
