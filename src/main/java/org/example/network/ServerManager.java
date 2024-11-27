@@ -32,7 +32,7 @@ public class ServerManager {
                         checkOrderStatus(creator);
                     }
                     else if ((request.equalsIgnoreCase("exit"))) {
-                        creator.writeLine("Thank you for your time. Your session is over");
+                        exitFromServer(creator);
                         break;
                     }
                     else {
@@ -56,23 +56,28 @@ public class ServerManager {
             creator.writeLine("That's a menu");
             Menu.printMenuToClient(creator);
             creator.writeLine("Please type 'order' to make the order");
+            creator.writeLine("end");
         }
 
         private void processOrder(Creator creator) throws IOException {
             creator.writeLine("Please provide your name: ");
+            creator.writeLine("end");
             String customerName = creator.readLine();
 
             creator.writeLine("Please provide your delivery address: ");
+            creator.writeLine("end");
             String address = creator.readLine();
 
             List<OrderItem> orderItemList = new ArrayList<>();
             while (true) {
                 creator.writeLine("Please enter the dish name (or 'DONE' to finish): ");
+                creator.writeLine("end");
                 String dishName = creator.readLine();
                 if (dishName.equalsIgnoreCase("DONE")) {
                     break;
                 }
                 creator.writeLine("Please enter the quantity " + dishName + ":");
+                creator.writeLine("end");
                 try {
                     int quantity = Integer.parseInt(creator.readLine());
                     orderItemList.add(new OrderItem(dishName, quantity));
@@ -83,14 +88,23 @@ public class ServerManager {
 
 
             }
-            orderService.addOrder( customerName, address, orderItemList);
-            System.out.println("Your order has been placed successfully");
+            int id = orderService.addOrder( customerName, address, orderItemList);
+            creator.writeLine("Your order has been placed successfully! Your Order number is: " + id);
+            creator.writeLine("end");
+            System.out.println("Order № " + id + " Successfully created");
+
         }
 
         private void checkOrderStatus(Creator creator) throws IOException {
             creator.writeLine("Please enter your order ID: ");
+            creator.writeLine("end");
             int orderID =Integer.parseInt(creator.readLine());
             String status =  orderService.checkOrderStatus(orderID);
             creator.writeLine(status);
+            creator.writeLine("end");
+        }
+        private void exitFromServer(Creator creator) throws IOException {
+            creator.writeLine("Thank you for your time. Your session is over");
+            creator.writeLine("end");
         }
 }

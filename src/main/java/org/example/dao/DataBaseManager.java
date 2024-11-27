@@ -53,7 +53,7 @@ public class DataBaseManager {
             e.printStackTrace();
         }
     }
-    public void addOrder(Order order)  {
+    public int addOrder(Order order)  {
         String insertOrderSQL = """
                 INSERT INTO orders (customerName, customerAddress, deliveryTime, delivered)
                 VALUES (?,?,?,?);
@@ -85,13 +85,18 @@ public class DataBaseManager {
                     itemStatement.setInt(3, orderItem.getQuantity());
                     itemStatement.executeUpdate();
                 }
+                return orderId;
             }
-
+            else {
+                throw new SQLException("Failed to retrieve the order ID.");
+            }
         }
         catch (SQLException e)
         {
             e.printStackTrace();
+            return -1;
         }
+
     }
     public void deleteOrder(int orderId)  {
         String deleteOrderSQL = " DELETE FROM orders WHERE orderId = ?";
@@ -127,16 +132,16 @@ public class DataBaseManager {
                     markAsDelivered(orderId, connection);
                     connection.commit();
                     String message = "Order ID " + orderId + " has been successfully delivered.";
-                    System.out.println(message); // Логирование на сервере
+                    System.out.println(message);
                     return message;
                 } else {
                     String message = "Order ID " + orderId + " has not been delivered yet.";
-                    System.out.println(message); // Логирование на сервере
+                    System.out.println(message);
                     return message;
                 }
             } else {
                 String message = "Order ID " + orderId + " not found.";
-                System.out.println(message); // Логирование на сервере
+                System.out.println(message);
                 return message;
             }
         } catch (SQLException e) {

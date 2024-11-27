@@ -54,7 +54,7 @@ public class Creator implements Closeable {
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         try {
-            while ((line = reader.readLine()) != null) {
+            while (!(line = reader.readLine()).equals("end")) {
                 stringBuilder.append(line).append("\n");
             }
             return stringBuilder.toString();
@@ -72,7 +72,6 @@ public class Creator implements Closeable {
     private BufferedWriter createWriter() throws IOException {
         return new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
-
     @Override
     public void close() throws IOException {
         writer.close();

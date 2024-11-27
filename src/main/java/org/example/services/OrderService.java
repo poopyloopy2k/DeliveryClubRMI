@@ -13,10 +13,10 @@ public class OrderService {
         this.dataBaseManager = dataBaseManager;
     }
 
-    public void addOrder(String deliveryAddress, String customerName, List<OrderItem> orderItemList)
+    public int addOrder(String deliveryAddress, String customerName, List<OrderItem> orderItemList)
     {
         Order order = new Order(deliveryAddress, customerName, orderItemList);
-        dataBaseManager.addOrder(order);
+        return dataBaseManager.addOrder(order);
     }
 
     public String checkOrderStatus(int orderId)
