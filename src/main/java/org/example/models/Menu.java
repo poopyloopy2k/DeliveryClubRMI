@@ -1,11 +1,10 @@
 package org.example.models;
-import org.example.models.Dish;
-import org.example.network.Creator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class Menu {
+public  class Menu implements Serializable {
     private static final List<Dish> menu = new ArrayList<>();
     static
     {
@@ -15,17 +14,17 @@ public  class Menu {
         menu.add(new Dish("Fries", 1.5));
         menu.add(new Dish("Coca-cola", 0.99));
     }
-    public static void printMenuToClient(Creator creator)
+    public static String printMenuToClient()
     {
 
         StringBuilder menuStr = new StringBuilder();
-        menuStr.append("Menu:  ");
+        menuStr.append("Menu: \n ");
         for(Dish dish: menu) {
-             menuStr.append("- ").append(dish.getName()).append(": $").append(dish.getPrice()).append("   ");
+             menuStr.append("- ").append(dish.getName()).append(": $").append(dish.getPrice()).append("\n ");
 
 
         }
-        creator.writeLine(menuStr.toString());
+        return (menuStr.toString());
 
 
     }

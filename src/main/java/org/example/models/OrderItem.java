@@ -2,10 +2,14 @@ package org.example.models;
 
 import lombok.Data;
     import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
-    @Data
+import java.io.Serializable;
+
+@Data
     @NoArgsConstructor
-    public class OrderItem {
+
+    public class OrderItem implements Serializable {
         private int orderId;
         private int itemId;
         private String dishName;

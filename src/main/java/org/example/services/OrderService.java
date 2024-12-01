@@ -5,8 +5,9 @@ import org.example.dao.DataBaseManager;
 import org.example.models.Order;
 import org.example.models.OrderItem;
 
+import java.io.Serializable;
 import java.util.List;
-public class OrderService {
+public class OrderService  implements Serializable {
     private final DataBaseManager dataBaseManager;
 
     public OrderService(DataBaseManager dataBaseManager) {

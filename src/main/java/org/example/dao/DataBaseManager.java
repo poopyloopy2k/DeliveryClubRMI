@@ -1,4 +1,5 @@
 package org.example.dao;
+import java.io.Serializable;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import org.example.models.*;
-public class DataBaseManager {
+public class DataBaseManager implements Serializable {
     private static final String URL = "jdbc:sqlite:orders.db";
 
     private Connection connect()
